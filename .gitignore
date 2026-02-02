@@ -38,3 +38,5 @@ artifacts/
 *.log
 *.tmp
 .DS_Store
+
+.idea
