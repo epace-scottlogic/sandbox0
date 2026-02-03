@@ -2,6 +2,7 @@ using DataServer.Application.Interfaces;
 using DataServer.Application.Services;
 using DataServer.Domain.Blockchain;
 using Moq;
+using static DataServer.Tests.Shared.TestTradeFactory;
 
 namespace DataServer.Tests.Application;
 
@@ -170,21 +171,6 @@ public class BlockchainDataServiceTests
         _mockRepository.Verify(
             repo => repo.AddTradeAsync(tradeAfterStop, It.IsAny<CancellationToken>()),
             Times.Never
-        );
-    }
-
-    private static TradeUpdate CreateTestTrade(Symbol symbol, string tradeId = "test-trade-1")
-    {
-        return new TradeUpdate(
-            Seqnum: 1,
-            Event: Event.Updated,
-            Channel: Channel.Trades,
-            Symbol: symbol,
-            Timestamp: DateTimeOffset.UtcNow,
-            Side: Side.Buy,
-            Qty: 1.5m,
-            Price: 50000m,
-            TradeId: tradeId
         );
     }
 }
