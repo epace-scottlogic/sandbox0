@@ -1,7 +1,7 @@
 using System.Text.Json;
 using DataServer.Api.Models.JsonRpc;
-using DataServer.Api.Utilities;
 using DataServer.Application.Services;
+using DataServer.Common.Extensions;
 using DataServer.Domain.Blockchain;
 using Microsoft.AspNetCore.SignalR;
 
@@ -90,7 +90,7 @@ public class BlockchainHub(
             return;
         }
 
-        if (!SymbolMapper.TryParse(request.Params.Symbol, out var symbol))
+        if (!request.Params.Symbol.TryParseEnumMember<Symbol>(out var symbol))
         {
             await SendErrorResponse(
                 JsonRpcError.InvalidParams($"Invalid symbol: {request.Params.Symbol}"),
@@ -142,7 +142,7 @@ public class BlockchainHub(
             return;
         }
 
-        if (!SymbolMapper.TryParse(request.Params.Symbol, out var symbol))
+        if (!request.Params.Symbol.TryParseEnumMember<Symbol>(out var symbol))
         {
             await SendErrorResponse(
                 JsonRpcError.InvalidParams($"Invalid symbol: {request.Params.Symbol}"),

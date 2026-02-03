@@ -3,6 +3,7 @@
     <ProjectReference Include="..\DataServer.Application\DataServer.Application.csproj" />
     <ProjectReference Include="..\DataServer.Infrastructure\DataServer.Infrastructure.csproj" />
     <ProjectReference Include="..\DataServer.Connectors\DataServer.Connectors.csproj" />
+    <ProjectReference Include="..\DataServer.Common\DataServer.Common.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
