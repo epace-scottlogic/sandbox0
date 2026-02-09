@@ -50,9 +50,9 @@ try
 
     builder.Services.AddHostedService<BlockchainHubService>();
     
-    builder.Services.AddScoped<IBackoffStrategy, ExponentialBackoffStrategy>();
-    builder.Services.AddScoped<RetryConnector>();
-    builder.Services.AddScoped<IWebSocketClient, WebSocketClientWrapper>();
+    builder.Services.AddSingleton<IBackoffStrategy, ExponentialBackoffStrategy>();
+    builder.Services.AddSingleton<RetryConnector>();
+    builder.Services.AddSingleton<IWebSocketClient, ResilientWebSocketClient>();
     builder.Services.AddSingleton<IBlockchainDataClient, BlockchainDataClient>();
     builder.Services.AddSingleton<IBlockchainDataRepository, InMemoryBlockchainDataRepository>();
     builder.Services.AddScoped<IBlockchainDataService, BlockchainDataService>();
