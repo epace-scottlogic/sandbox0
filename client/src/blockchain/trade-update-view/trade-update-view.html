@@ -1,0 +1,22 @@
+<div class="trade-update">
+  <div class="trade-field">
+    <span class="trade-label">Symbol</span>
+    <span class="trade-value">{{ trade().symbol }}</span>
+  </div>
+  <div class="trade-field">
+    <span class="trade-label">Timestamp</span>
+    <span class="trade-value">{{ trade().timestamp }}</span>
+  </div>
+  <div class="trade-field">
+    <span class="trade-label">Side</span>
+    <span class="trade-value" [class.side-buy]="trade().side === 'buy'" [class.side-sell]="trade().side === 'sell'">{{ trade().side }}</span>
+  </div>
+  <div class="trade-field">
+    <span class="trade-label">Qty</span>
+    <span class="trade-value">{{ trade().qty }}</span>
+  </div>
+  <div class="trade-field">
+    <span class="trade-label">Price</span>
+    <span class="trade-value">{{ trade().price }}</span>
+  </div>
+</div>

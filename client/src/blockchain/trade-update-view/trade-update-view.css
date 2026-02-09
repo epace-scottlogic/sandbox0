@@ -1,0 +1,32 @@
+.trade-update {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  background-color: #f8fafc;
+}
+
+.trade-field {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.trade-label {
+  font-weight: 600;
+  color: #64748b;
+}
+
+.trade-value {
+  color: #1e293b;
+}
+
+.side-buy {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.side-sell {
+  color: #dc2626;
+  font-weight: 600;
+}

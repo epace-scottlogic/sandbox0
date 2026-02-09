@@ -1,0 +1,11 @@
+.trade-update-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.no-trades {
+  color: #94a3b8;
+  font-style: italic;
+  padding: 16px 0;
+}

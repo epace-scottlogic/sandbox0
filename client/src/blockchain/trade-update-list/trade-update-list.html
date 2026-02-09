@@ -1,0 +1,7 @@
+<div class="trade-update-list">
+  @for (trade of trades(); track trade.tradeId) {
+    <app-trade-update-view [trade]="trade" />
+  } @empty {
+    <p class="no-trades">No trades to display.</p>
+  }
+</div>
