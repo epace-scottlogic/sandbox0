@@ -1,11 +1,14 @@
 .trade-update-list {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
 }
 
 .no-trades {
-  color: #94a3b8;
+  color: #737373;
   font-style: italic;
   padding: 16px 0;
+  font-family: sans-serif;
 }

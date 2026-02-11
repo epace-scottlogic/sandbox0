@@ -10,6 +10,7 @@ export interface NavItem {
   selector: 'app-navbar',
   imports: [RouterLink],
   templateUrl: './navbar.html',
+  styleUrl: './navbar.css',
 })
 export class Navbar {
   navItems = input<NavItem[]>([]);
