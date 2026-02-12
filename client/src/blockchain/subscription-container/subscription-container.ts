@@ -12,9 +12,20 @@ export class SubscriptionContainer {
   symbol = input.required<string>();
   trades = input<TradeUpdate[]>([]);
   loading = input<boolean>(false);
+  state = input<'active' | 'paused'>('active');
   unsubscribed = output<string>();
+  resubscribed = output<string>();
+  dismissed = output<string>();
 
   onUnsubscribe(): void {
     this.unsubscribed.emit(this.symbol());
+  }
+
+  onResubscribe(): void {
+    this.resubscribed.emit(this.symbol());
+  }
+
+  onDismiss(): void {
+    this.dismissed.emit(this.symbol());
   }
 }

@@ -7,10 +7,13 @@ import { ConnectionStatus } from './connection-status/connection-status';
 import { TradeUpdate, Symbol } from './models/trade-update';
 import { ConnectionState } from '../rpc';
 
+type SubscriptionState = 'active' | 'paused';
+
 interface SymbolSubscription {
   symbol: string;
   trades: TradeUpdate[];
   loading: boolean;
+  state: SubscriptionState;
 }
 
 @Component({
@@ -36,7 +39,7 @@ export class Blockchain implements OnInit, OnDestroy {
   ) {}
 
   get activeSymbols(): string[] {
-    return this.subscriptions.map((s) => s.symbol);
+    return this.subscriptions.filter((s) => s.state === 'active').map((s) => s.symbol);
   }
 
   ngOnInit(): void {
@@ -66,7 +69,7 @@ export class Blockchain implements OnInit, OnDestroy {
     this.stateSubscription?.unsubscribe();
     this.backendConnectionSubscription?.unsubscribe();
 
-    for (const sub of this.subscriptions) {
+    for (const sub of this.subscriptions.filter((s) => s.state === 'active')) {
       this.rpcService.unsubscribe(sub.symbol as Symbol).subscribe();
     }
 
@@ -74,11 +77,15 @@ export class Blockchain implements OnInit, OnDestroy {
   }
 
   onSymbolSelected(symbol: string): void {
-    if (this.subscriptions.some((s) => s.symbol === symbol)) {
+    const existing = this.subscriptions.find((s) => s.symbol === symbol);
+    if (existing) {
+      if (existing.state === 'paused') {
+        this.onResubscribe(symbol);
+      }
       return;
     }
 
-    const entry: SymbolSubscription = { symbol, trades: [], loading: true };
+    const entry: SymbolSubscription = { symbol, trades: [], loading: true, state: 'active' };
     this.subscriptions = [...this.subscriptions, entry];
 
     this.rpcService.subscribe(symbol as Symbol).subscribe({
@@ -93,8 +100,28 @@ export class Blockchain implements OnInit, OnDestroy {
   }
 
   onUnsubscribe(symbol: string): void {
-    this.subscriptions = this.subscriptions.filter((s) => s.symbol !== symbol);
+    this.updateSubscription(symbol, { state: 'paused' });
     this.rpcService.unsubscribe(symbol as Symbol).subscribe();
+  }
+
+  onResubscribe(symbol: string): void {
+    this.updateSubscription(symbol, { loading: true, state: 'active' });
+    this.rpcService.subscribe(symbol as Symbol).subscribe({
+      next: () => {
+        this.updateSubscription(symbol, { loading: false });
+        this.cdr.detectChanges();
+      },
+      error: (err: unknown) => {
+        this.updateSubscription(symbol, { state: 'paused', loading: false });
+        this.connectionError =
+          err instanceof Error ? err.message : `Failed to resubscribe to ${symbol}`;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  onDismiss(symbol: string): void {
+    this.subscriptions = this.subscriptions.filter((s) => s.symbol !== symbol);
   }
 
   dismissError(): void {
@@ -104,7 +131,7 @@ export class Blockchain implements OnInit, OnDestroy {
   private listenForTrades(): void {
     this.tradeSubscription = this.rpcService.onTradeUpdate().subscribe((trade) => {
       this.subscriptions = this.subscriptions.map((s) =>
-        s.symbol === trade.symbol
+        s.symbol === trade.symbol && s.state === 'active'
           ? { ...s, trades: [trade, ...s.trades], loading: false }
           : s,
       );

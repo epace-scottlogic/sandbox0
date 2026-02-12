@@ -38,6 +38,48 @@
   border-color: #9ca3af;
 }
 
+.resubscribe-btn {
+  padding: 6px 14px;
+  border: 1px solid #6ee7b7;
+  border-radius: 4px;
+  background: #d1fae5;
+  color: #065f46;
+  font-family: sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.resubscribe-btn:hover {
+  background: #a7f3d0;
+  border-color: #34d399;
+}
+
+.dismiss-btn {
+  padding: 6px 14px;
+  border: 1px solid #fca5a5;
+  border-radius: 4px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-family: sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.dismiss-btn:hover {
+  background: #fecaca;
+  border-color: #f87171;
+}
+
+.subscription-container.paused {
+  border-color: #e5e7eb;
+  background: #f3f4f6;
+  opacity: 0.85;
+}
+
 .subscription-body {
   overflow-x: auto;
 }

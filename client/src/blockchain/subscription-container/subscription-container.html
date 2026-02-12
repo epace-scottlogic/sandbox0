@@ -1,7 +1,12 @@
-<div class="subscription-container">
+<div class="subscription-container" [class.paused]="state() === 'paused'">
   <div class="subscription-header">
     <span class="subscription-symbol">{{ symbol() }}</span>
-    <button class="unsubscribe-btn" (click)="onUnsubscribe()">Unsubscribe</button>
+    @if (state() === 'active') {
+      <button class="unsubscribe-btn" (click)="onUnsubscribe()">Unsubscribe</button>
+    } @else {
+      <button class="resubscribe-btn" (click)="onResubscribe()">Resubscribe</button>
+      <button class="dismiss-btn" (click)="onDismiss()">Dismiss</button>
+    }
   </div>
   <div class="subscription-body">
     @if (loading()) {

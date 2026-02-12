@@ -28,7 +28,10 @@
         [symbol]="sub.symbol"
         [trades]="sub.trades"
         [loading]="sub.loading"
+        [state]="sub.state"
         (unsubscribed)="onUnsubscribe($event)"
+        (resubscribed)="onResubscribe($event)"
+        (dismissed)="onDismiss($event)"
       />
     } @empty {
       <p class="empty-state">Select a symbol above to start streaming trades.</p>

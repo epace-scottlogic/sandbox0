@@ -15,12 +15,12 @@ describe('ServiceError', () => {
   it('should preserve the cause', () => {
     const original = new Error('original');
     const error = new ServiceError('wrapped', original);
-    expect(error.originalCause).toBe(original);
+    expect(error.cause).toBe(original);
   });
 
   it('should allow undefined cause', () => {
     const error = new ServiceError('no cause');
-    expect(error.originalCause).toBeUndefined();
+    expect(error.cause).toBeUndefined();
   });
 
   it('should be an instance of Error', () => {
@@ -51,7 +51,7 @@ describe('wrapServiceError', () => {
       await firstValueFrom(result$);
     } catch (err) {
       expect(err).toBeInstanceOf(ServiceError);
-      expect((err as ServiceError).originalCause).toBe(original);
+      expect((err as ServiceError).cause).toBe(original);
     }
   });
 
@@ -62,7 +62,7 @@ describe('wrapServiceError', () => {
       await firstValueFrom(result$);
     } catch (err) {
       expect(err).toBeInstanceOf(ServiceError);
-      expect((err as ServiceError).originalCause).toBe('string error');
+      expect((err as ServiceError).cause).toBe('string error');
     }
   });
 });
