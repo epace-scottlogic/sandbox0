@@ -3,7 +3,7 @@ import json
 import logging
 import os
 import sys
-import time
+import datetime
 
 from dotenv import load_dotenv
 from signalrcore.hub_connection_builder import HubConnectionBuilder
@@ -101,7 +101,7 @@ _current_controller = None
 def on_message_received(message):
     if _current_controller and _current_controller.is_print_paused():
         return
-    print(f"Recieved at: {time.time()}")
+    print(f"Recieved at: {datetime.datetime.now()}")
     print_json(message, "Message Received")
 
 
