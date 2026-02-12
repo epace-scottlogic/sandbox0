@@ -5,32 +5,47 @@ namespace DataServer.Application.Services;
 
 public class BlockchainDataService : IBlockchainDataService
 {
-    private readonly IBlockchainDataSource _dataSource;
+    private readonly IBlockchainDataClient _dataClient;
     private readonly IBlockchainDataRepository _repository;
+    private readonly ISubscriptionManager _subscriptionManager;
     private EventHandler<TradeUpdate>? _tradeReceivedHandler;
+    private EventHandler? _connectionLostHandler;
+    private EventHandler? _connectionRestoredHandler;
 
     public event EventHandler<TradeUpdate>? TradeReceived;
+    public event EventHandler? ConnectionLost;
+    public event EventHandler? ConnectionRestored;
 
     public BlockchainDataService(
-        IBlockchainDataSource dataSource,
-        IBlockchainDataRepository repository
+        IBlockchainDataClient dataClient,
+        IBlockchainDataRepository repository,
+        ISubscriptionManager subscriptionManager
     )
     {
-        _dataSource = dataSource;
+        _dataClient = dataClient;
         _repository = repository;
+        _subscriptionManager = subscriptionManager;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
         _tradeReceivedHandler = (sender, trade) => _ = OnTradeReceivedAsync(trade);
-        _dataSource.TradeReceived += _tradeReceivedHandler;
-        await _dataSource.ConnectAsync(cancellationToken);
+        _connectionLostHandler = (sender, args) => ConnectionLost?.Invoke(this, EventArgs.Empty);
+        _connectionRestoredHandler = (sender, args) =>
+            ConnectionRestored?.Invoke(this, EventArgs.Empty);
+
+        _dataClient.TradeReceived += _tradeReceivedHandler;
+        _dataClient.ConnectionLost += _connectionLostHandler;
+        _dataClient.ConnectionRestored += _connectionRestoredHandler;
+        await _dataClient.ConnectAsync(cancellationToken);
     }
 
     public async Task StopAsync(CancellationToken cancellationToken = default)
     {
-        _dataSource.TradeReceived -= _tradeReceivedHandler;
-        await _dataSource.DisconnectAsync(cancellationToken);
+        _dataClient.TradeReceived -= _tradeReceivedHandler;
+        _dataClient.ConnectionLost -= _connectionLostHandler;
+        _dataClient.ConnectionRestored -= _connectionRestoredHandler;
+        await _dataClient.DisconnectAsync(cancellationToken);
     }
 
     public async Task SubscribeToTradesAsync(
@@ -38,7 +53,10 @@ public class BlockchainDataService : IBlockchainDataService
         CancellationToken cancellationToken = default
     )
     {
-        await _dataSource.SubscribeToTradesAsync(symbol, cancellationToken);
+        if (_subscriptionManager.ShouldSubscribeDownstream(symbol))
+        {
+            await _dataClient.SubscribeToTradesAsync(symbol, cancellationToken);
+        }
     }
 
     public async Task UnsubscribeFromTradesAsync(
@@ -46,7 +64,10 @@ public class BlockchainDataService : IBlockchainDataService
         CancellationToken cancellationToken = default
     )
     {
-        await _dataSource.UnsubscribeFromTradesAsync(symbol, cancellationToken);
+        if (_subscriptionManager.ShouldUnsubscribeDownstream(symbol))
+        {
+            await _dataClient.UnsubscribeFromTradesAsync(symbol, cancellationToken);
+        }
     }
 
     public async Task<IReadOnlyList<TradeUpdate>> GetRecentTradesAsync(

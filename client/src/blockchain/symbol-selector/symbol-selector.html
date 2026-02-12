@@ -1,0 +1,12 @@
+<ul class="symbol-list">
+  @for (symbol of symbols; track symbol) {
+    <li
+      class="symbol-item"
+      [class.active]="isActive(symbol)"
+      [attr.aria-disabled]="isActive(symbol)"
+      (click)="onSelect(symbol)"
+    >
+      {{ symbol }}
+    </li>
+  }
+</ul>

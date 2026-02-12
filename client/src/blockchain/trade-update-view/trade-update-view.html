@@ -1,0 +1,12 @@
+<div class="trade-card" [class.side-buy]="trade().side === 'buy'" [class.side-sell]="trade().side === 'sell'">
+  <div class="trade-primary">
+    <span class="trade-side">{{ trade().side.toUpperCase() }}</span>
+    <span class="trade-qty">{{ trade().qty }}</span>
+    <span class="trade-price">@ {{ trade().price }}</span>
+  </div>
+  <div class="trade-details">
+    <span class="trade-symbol">{{ trade().symbol }}</span>
+    <span class="trade-timestamp">{{ trade().timestamp }}</span>
+    <span class="trade-id">{{ trade().tradeId }}</span>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 24px;
+  background-color: #e5e5e5;
+  border-bottom: 1px solid #d4d4d4;
+  font-family: sans-serif;
+}
+
+nav a {
+  padding: 8px 16px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  color: #404040;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+nav a:hover {
+  background-color: #d4d4d4;
+  color: #171717;
+}

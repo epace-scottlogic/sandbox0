@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="DataServer.Api/DataServer.Api.csproj" />
   <Project Path="DataServer.Application/DataServer.Application.csproj" />
+  <Project Path="DataServer.Common/DataServer.Common.csproj" />
   <Project Path="DataServer.Connectors/DataServer.Connectors.csproj" />
   <Project Path="DataServer.Domain/DataServer.Domain.csproj" />
   <Project Path="DataServer.Infrastructure/DataServer.Infrastructure.csproj" />

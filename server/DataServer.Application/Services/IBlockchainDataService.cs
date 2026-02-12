@@ -17,4 +17,6 @@ public interface IBlockchainDataService
     );
 
     event EventHandler<TradeUpdate>? TradeReceived;
+    event EventHandler? ConnectionLost;
+    event EventHandler? ConnectionRestored;
 }
